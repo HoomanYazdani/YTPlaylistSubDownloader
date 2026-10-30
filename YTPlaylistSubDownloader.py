@@ -1,14 +1,3 @@
-این نسخه دقیقاً با همان شروط دقیق آماده شده هوتی جان:
-
-1. **انتقال به ابتدایی‌ترین نقطه کد:** متغیرهای `PLAYLIST_URL` و `DESTINATION_FOLDER` به همراه توضیحات کامل در همان خطوط نخست پس از `import` قرار داده شدند تا هر بیننده‌ای در نگاه اول آن را ببیند و نیازی به اسکرول نباشد.
-2. **رنگ قرمز مخصوص VS Code:** از ساختار `! #` و کلمات کلیدی استاندارد رنگ قرمز اکستنشن‌های VS Code (مانند **Better Comments** یا **Todo Tree**) شامل `! 🔴 CRITICAL / REQUIRED` استفاده شده که به رنگ قرمز جلب‌توجه‌کننده هایلایت می‌شود، به همراه اموجی‌های هشدار `🛑` و `🔴` برای وضوح فوق‌العاده در محیط وب GitHub.
-3. **مقادیر سمپل درخواستی:**
-   - `PLAYLIST_URL = "https://www.youtube.com/playlist?list=********"`
-   - `DESTINATION_FOLDER = r"C:\Users\Default\Downloads"`
-4. **ساختار دو زبانه استاندارد گیت‌هاب:** تمام داک‌استرینگ‌ها، گام‌ها و کامنت‌های توابع ابتدا با انگلیسی دقیق و حرفه‌ای و در خط بعد با معادل روان فارسی نوشته شده‌اند.
-5. **سلامت کامل منطق کد:** تمام توابع، ریجکس‌ها، رفع ارور ۴۲۹ و مرتب‌سازی طبیعی دست‌نخورده و بدون کوچک‌ترین تغییری در منطق عملکرد حفظ شدند:
-
-```python
 import os
 import sys
 import subprocess
@@ -76,12 +65,12 @@ def download_subtitles(playlist_url, dest_folder):
         "--write-subs",
         "--write-auto-subs",
         "--skip-download",
-        "--sub-langs", "en",          # Fetch a single English subtitle track to avoid duplicate dialect files / فقط زیرنویس واحد انگلیسی برای جلوگیری از تکرار فایلی
+        "--sub-langs", "en",          # Fetch a single English subtitle track to avoid duplicate dialect files
         "--user-agent", user_agent,
-        "--sleep-subtitles", "2",     # Delay between subtitles to prevent HTTP 429 / تأخیر جهت جلوگیری از مسدودسازی موقت
+        "--sleep-subtitles", "2",     # Delay between subtitles to prevent HTTP 429
         "--retries", "10",
         "--fragment-retries", "10",
-        "-i",                         # Continue downloading subsequent lectures on error / ادامه فرآیند در صورت بروز خطا در یک ویدیو
+        "-i",                         # Continue downloading subsequent lectures on error
         playlist_url
     ]
 
@@ -95,8 +84,6 @@ def clean_vtt_text(text):
     Strip WebVTT headers, timecodes, styling blocks, and HTML tags.
     حذف هدرهای وب‌وی‌تی‌تی، تایم‌استمپ‌ها، کدهای زمانی و تگ‌های HTML.
     """
-    # Remove WebVTT headers and metadata
-    # حذف هدر و متادیتای وب‌وی‌تی‌تی
     text = re.sub(r'WEBVTT.*?\n', '', text, flags=re.DOTALL)
     text = re.sub(r'Kind:.*?\n', '', text)
     text = re.sub(r'Language:.*?\n', '', text)
@@ -106,23 +93,15 @@ def clean_vtt_text(text):
     last_line = ""
 
     for line in lines:
-        # Skip timestamp lines and WebVTT formatting blocks
-        # رد کردن خطوط زمانی و کدهای استایل وب‌وی‌تی‌تی
         if '-->' in line or line.strip().startswith('NOTE') or line.strip().startswith('STYLE'):
             continue
 
-        # Strip inline HTML formatting tags
-        # حذف تگ‌های درون‌خطی HTML
         line = re.sub(r'<[^>]+>', '', line)
         line = line.strip()
 
-        # Skip empty lines or pure numeric sequence indexes
-        # رد کردن خطوط خالی یا اعدادی که فقط شماره سکانس هستند
         if not line or line.isdigit():
             continue
 
-        # Prevent duplicate consecutive sentences
-        # جلوگیری از تکرار جملات پشت‌سرهم یکسان
         if line != last_line:
             cleaned_lines.append(line)
             last_line = line
@@ -147,19 +126,13 @@ def merge_subtitles_to_txt(dest_folder):
         print("❌ هیچ فایل زیرنویسی در این پوشه یافت نشد!")
         return
 
-    # 1. Map exactly one file per unique lecture base identifier to prevent duplicates
-    # ۱. شناسایی و فیلتر کردن فایل‌های تکراری و اختصاص یک فایل یکتا به هر جلسه
     video_map = {}
     for f in raw_files:
         filename = os.path.basename(f)
-        # Extract base video identifier without language extensions (.en.vtt, .srt, etc.)
-        # استخراج عنوان پایه بدون پسوندهای زبانی جهت جلوگیری از تکرار لهجه‌ها
         base_id = re.sub(r'(\.[a-z]{2}(-[A-Za-z]+)?)?\.(vtt|srt)$', '', filename)
         if base_id not in video_map:
             video_map[base_id] = f
 
-    # 2. Sort files naturally (1, 2, ..., 9, 10, 11)
-    # ۲. مرتب‌سازی طبیعی براساس اعداد واقعی درون نام فایل‌ها
     sorted_unique_files = sorted(video_map.values(), key=natural_sort_key)
 
     master_txt_path = os.path.join(dest_folder, "00_All_Lectures_Transcript.txt")
@@ -169,8 +142,6 @@ def merge_subtitles_to_txt(dest_folder):
 
         for file_path in sorted_unique_files:
             file_name = os.path.basename(file_path)
-            # Clean up display title from extensions and YouTube ID suffixes
-            # تمیز کردن عنوان نمایشی ویدیو و حذف شناسه‌های داخل براکت
             clean_title = re.sub(r'(\.[a-z]{2}(-[A-Za-z]+)?)?\.(vtt|srt)$', '', file_name)
             clean_title = re.sub(r' \[[a-zA-Z0-9_-]+\]$', '', clean_title)
 
@@ -197,4 +168,3 @@ if __name__ == "__main__":
 
     download_subtitles(PLAYLIST_URL, DESTINATION_FOLDER)
     merge_subtitles_to_txt(DESTINATION_FOLDER)
-```
