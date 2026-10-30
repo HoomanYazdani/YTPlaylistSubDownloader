@@ -10,7 +10,7 @@ PLAYLIST_URL = "https://www.youtube.com/playlist?list=PL4C4C8A7D06566F38"
 
 # 🔴 [REQUIRED] Paste your Target Folder Address HERE between these Quotations:
 # 🔴 [الزامی] آدرس پوشه مقصد (برای ذخیره فایل‌ها) را اینجا، میان این دو کوتیشن قرار دهید:
-DESTINATION_FOLDER = r"E:\Hooty\0000-Uni\03-Term 3-40451\02-ریاضی عمومی 2"
+DESTINATION_FOLDER = r"E:\Hooty\0000-Uni\"
 # ==============================================================================
 
 def download_subtitles(playlist_url, dest_folder):
