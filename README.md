@@ -7,6 +7,9 @@
 <a name="english"></a>
 ## English
 
+> **Important Note on Network & IP Blocking:**  
+> If you encounter `HTTP Error 429: Too Many Requests` or connection errors, your IP or shared VPN/proxy address has likely been temporarily rate-limited or blocked by YouTube. To resolve this, switch your VPN server, use a clean residential IP, or configure a proxy directly.
+
 ### Why Use This Tool?
 Watching long educational videos takes too much time. However, asking an AI about video content without providing the actual transcript often causes the AI to hallucinate and give inaccurate answers. 
 
@@ -21,6 +24,9 @@ This tool converts YouTube playlists into a clean, unified text file, allowing y
 
 <a name="farsi"></a>
 ## فارسی
+
+> **توجه مهم درباره آی‌پی و شبکه:**  
+> در صورت مواجهه با خطای `HTTP Error 429: Too Many Requests` یا خطاهای اتصال، احتمالاً آی‌پی شما یا سرور اشتراکی فیلترشکن / پروکسی توسط یوتیوب محدود (Rate-limit) یا بلاک شده است. برای رفع مشکل، لوکیشن/سرور را تغییر دهید یا از آی‌پی خلوت‌تری استفاده کنید.
 
 ### چرا از این ابزار استفاده کنیم؟
 تماشای ویدیوهای آموزشی طولانی، زمان زیادی از شما می‌گیرد. از طرفی، پرسیدن از هوش مصنوعی درباره ویدیوها بدون ارائه متن اصلی، باعث تولید پاسخ‌های نادرست و حدسی می‌شود.
