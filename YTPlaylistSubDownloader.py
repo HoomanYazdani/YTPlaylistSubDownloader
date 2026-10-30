@@ -1,7 +1,26 @@
 import os
+import sys
 import subprocess
 import re
 import glob
+
+# ==============================================================================
+# Auto-install yt-dlp if not installed
+# بررسی و نصب خودکار yt-dlp در صورت عدم وجود
+# ==============================================================================
+try:
+    import yt_dlp
+except ImportError:
+    print("[*] yt-dlp is not installed. Installing it automatically via pip...")
+    print("[*] ابزار yt-dlp نصب نیست. در حال نصب خودکار از طریق pip...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "yt-dlp"])
+        print("[+] yt-dlp installed successfully!\n")
+        print("[+] ابزار yt-dlp با موفقیت نصب شد!\n")
+    except Exception as e:
+        print(f"[-] Installation failed / خطا در نصب خودکار: {e}")
+        print("Please run manually / لطفاً دستور زیر را دستی در ترمینال بزنید: pip install yt-dlp")
+        sys.exit(1)
 
 # ==============================================================================
 # 🔴 [REQUIRED] Paste your Playlist Link HERE between these Quotations:
@@ -10,7 +29,7 @@ PLAYLIST_URL = "https://www.youtube.com/playlist?list=PL4C4C8A7D06566F38"
 
 # 🔴 [REQUIRED] Paste your Target Folder Address HERE between these Quotations:
 # 🔴 [الزامی] آدرس پوشه مقصد (برای ذخیره فایل‌ها) را اینجا، میان این دو کوتیشن قرار دهید:
-DESTINATION_FOLDER = r"E:\Hooty\0000-Uni\"
+DESTINATION_FOLDER = r"E:\Hooty\0000-Uni"
 # ==============================================================================
 
 def download_subtitles(playlist_url, dest_folder):
@@ -22,7 +41,7 @@ def download_subtitles(playlist_url, dest_folder):
     print("⏳ در حال دانلود تمامی زیرنویس‌ها (دستی و خودکار)...")
     
     command = [
-        "yt-dlp",
+        sys.executable, "-m", "yt_dlp",
         "-P", dest_folder,
         "--write-subs",
         "--write-auto-subs",
@@ -111,7 +130,7 @@ def merge_subtitles_to_txt(dest_folder):
             master_file.write(f"{'='*50}\n\n")
             master_file.write(pure_text + "\n\n\n")
             
-    print(f"✅ Master transcript file successfully created and ready for AI:\n{master_file_path}")
+    print(f"✅ Master transcript file successfully created and ready for AI:\n{master_txt_path}")
     print(f"✅ فایل نهایی یکپارچه با موفقیت ساخته شد و آماده ارسال به هوش مصنوعی است:\n{master_txt_path}")
 
 if __name__ == "__main__":
